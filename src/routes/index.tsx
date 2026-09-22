@@ -8,8 +8,8 @@ import { Benefits, CustomOrder, PerfumeHelp, StoreInfo } from "@/components/site
 import { btnGhost, btnGold, btnWhats } from "@/components/site/buttons";
 import { getPublicCatalog } from "@/lib/catalog.functions";
 import { FULL_ADDRESS, STORE, WA_GENERAL, waLink } from "@/lib/store";
-import heroWide from "@/assets/a.jpg.asset.json";
-import heroSquare from "@/assets/b.jpg.asset.json";
+import heroWide from "@/assets/hero-lattafa-wide.jpeg.asset.json";
+import heroSquare from "@/assets/hero-lattafa-square.jpeg.asset.json";
 
 type Search = {
   categoria?: "perfumes" | "celulares" | undefined;
