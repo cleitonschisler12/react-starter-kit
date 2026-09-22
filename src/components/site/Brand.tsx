@@ -1,4 +1,4 @@
-import logoAsset from "@/assets/logo.jpg.asset.json";
+import logoAsset from "@/assets/logo-cce.jpeg.asset.json";
 
 export function Brand({
   logoUrl,
