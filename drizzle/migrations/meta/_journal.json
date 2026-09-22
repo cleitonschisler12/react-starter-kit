@@ -8,6 +8,13 @@
       "when": 1789666609600,
       "tag": "0000_cce_imports_catalog",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789666609601,
+      "tag": "0001_fotos_produtos_loja",
+      "breakpoints": true
     }
   ]
 }
