@@ -15,6 +15,13 @@
       "when": 1789666609601,
       "tag": "0001_fotos_produtos_loja",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790125742615,
+      "tag": "0002_cce_imports_catalog_tables",
+      "breakpoints": true
     }
   ]
 }
