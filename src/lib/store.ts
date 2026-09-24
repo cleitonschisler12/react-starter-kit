@@ -1,3 +1,5 @@
+import { resolveSiteOrigin } from "./site-url";
+
 export const STORE = {
   name: "CCE Imports",
   whatsapp: "5546999864663",
