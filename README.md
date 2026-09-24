@@ -7,7 +7,7 @@ protegido. Não há carrinho, checkout, pagamento online nem cadastro de cliente
 
 - `/` — topo, benefícios, catálogo com busca e filtros, encomendas, ajuda para escolher, nossa loja e dúvidas
 - `/produto/<slug>` — fotos, preço por forma de pagamento, simulação de crédito, ficha técnica e pedido no WhatsApp
-- `/privacidade` — aviso de privacidade
+- `/privacidade` — aviso de privacidade 
 - `/admin/login` — acesso da equipe
 - `/admin` — produtos e pendências; `/admin/produto/<id>` edição; `/admin/config` textos e imagens da home
 
