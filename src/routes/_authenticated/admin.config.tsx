@@ -39,6 +39,7 @@ const FIELDS: Array<[string, string, string]> = [
 function AdminConfig() {
   const { settings } = Route.useLoaderData();
   const save = useServerFn(updateAdminSettings);
+  const sendImage = useServerFn(uploadAdminImage);
   const [values, setValues] = useState<Record<string, string>>(() =>
     Object.fromEntries(FIELDS.map(([key]) => [key, (settings as any)?.[key] ?? ""])),
   );
