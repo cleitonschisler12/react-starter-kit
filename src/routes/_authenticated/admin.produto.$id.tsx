@@ -6,7 +6,9 @@ import {
   deleteProductImage,
   getAdminProduct,
   updateAdminProduct,
+  uploadAdminImage,
 } from "@/lib/admin.functions";
+import { fileToBase64 } from "@/lib/upload";
 import { sortedImages } from "@/lib/catalog";
 import { btnGhost, btnGold, btnSubtle } from "@/components/site/buttons";
 
@@ -39,6 +41,7 @@ function EditProduct() {
   const save = useServerFn(updateAdminProduct);
   const addImage = useServerFn(addProductImage);
   const removeImage = useServerFn(deleteProductImage);
+  const sendImage = useServerFn(uploadAdminImage);
 
   const [form, setForm] = useState({
     name: product.name,
@@ -246,6 +249,40 @@ function EditProduct() {
         </ul>
 
         <div className="mt-5 space-y-3">
+          <div>
+            <label htmlFor="img_file" className="block text-sm font-medium">
+              Enviar foto do computador ou celular
+            </label>
+            <input
+              id="img_file"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/avif"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                setStatus("Enviando foto…");
+                try {
+                  const base64 = await fileToBase64(file);
+                  const { url } = await sendImage({
+                    data: {
+                      filename: file.name,
+                      content_type: file.type,
+                      data: base64,
+                      folder: "produtos",
+                    },
+                  });
+                  setNewImage((v) => ({ ...v, url }));
+                  setStatus("Foto enviada. Confira a descrição e clique em “Adicionar foto”.");
+                } catch {
+                  setStatus("Não foi possível enviar a foto. Use JPG, PNG ou WEBP de até 10 MB.");
+                }
+              }}
+              className="mt-1 w-full rounded-md border border-border bg-elevated px-3 py-2 text-sm"
+            />
+            <p className="mt-1 text-xs text-muted-foreground">
+              A foto enviada preenche o endereço abaixo automaticamente.
+            </p>
+          </div>
           <div>
             <label htmlFor="img_url" className="block text-sm font-medium">
               Endereço da nova foto

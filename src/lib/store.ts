@@ -1,3 +1,5 @@
+import { resolveSiteOrigin } from "./site-url";
+
 export const STORE = {
   name: "CCE Imports",
   whatsapp: "5546999864663",
@@ -56,6 +58,7 @@ export function waCustomOrderMessage(category: string, product: string): string 
   return `Olá! Vim pelo site da CCE Imports e gostaria de consultar uma encomenda de ${category}: ${product}. Podem verificar disponibilidade, valor e prazo?`;
 }
 
-export function publicProductUrl(slug: string): string {
-  return `/produto/${slug}`;
+/** Endereço público completo do produto, usado nas mensagens do WhatsApp. */
+export function publicProductUrl(slug: string, origin?: string | null): string {
+  return `${resolveSiteOrigin(origin)}/produto/${slug}`;
 }
