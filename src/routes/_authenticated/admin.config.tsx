@@ -86,6 +86,34 @@ function AdminConfig() {
                 className="mt-1 w-full rounded-md border border-border bg-elevated px-3 py-2 text-sm"
               />
             )}
+            {key.endsWith("_url") && (
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/avif"
+                aria-label={`Enviar arquivo para ${label}`}
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  setStatus("Enviando imagem…");
+                  try {
+                    const base64 = await fileToBase64(file);
+                    const { url } = await sendImage({
+                      data: {
+                        filename: file.name,
+                        content_type: file.type,
+                        data: base64,
+                        folder: "loja",
+                      },
+                    });
+                    setValues((v) => ({ ...v, [key]: url }));
+                    setStatus("Imagem enviada. Clique em “Salvar” para aplicar no site.");
+                  } catch {
+                    setStatus("Não foi possível enviar a imagem. Use JPG, PNG ou WEBP até 10 MB.");
+                  }
+                }}
+                className="mt-2 w-full rounded-md border border-border bg-elevated px-3 py-2 text-sm"
+              />
+            )}
             {hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
           </div>
         ))}
