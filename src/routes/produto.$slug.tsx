@@ -17,6 +17,7 @@ import {
   type PaymentRules,
 } from "@/lib/pricing";
 import { publicProductUrl, waLink, waOrderMessage, waRestockMessage } from "@/lib/store";
+import { useSiteOrigin } from "@/hooks/use-site-origin";
 
 export const Route = createFileRoute("/produto/$slug")({
   loader: async ({ params }) => {
