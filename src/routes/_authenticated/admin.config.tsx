@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { getAdminSettings, updateAdminSettings } from "@/lib/admin.functions";
+import { getAdminSettings, updateAdminSettings, uploadAdminImage } from "@/lib/admin.functions";
+import { fileToBase64 } from "@/lib/upload";
 import { btnGhost, btnGold } from "@/components/site/buttons";
 
 export const Route = createFileRoute("/_authenticated/admin/config")({
