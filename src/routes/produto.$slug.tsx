@@ -107,7 +107,8 @@ function ProductPage() {
   const [active, setActive] = useState(0);
   const detail = productDetail(p);
   const soldOut = p.availability === "sold_out";
-  const url = publicProductUrl(p.slug);
+  const siteOrigin = useSiteOrigin();
+  const url = publicProductUrl(p.slug, siteOrigin);
 
   const [installments, setInstallments] = useState(1);
   const table = useMemo(() => paymentTable(p.base_price_cents, rule), [p.base_price_cents, rule]);
