@@ -6,7 +6,9 @@ import {
   deleteProductImage,
   getAdminProduct,
   updateAdminProduct,
+  uploadAdminImage,
 } from "@/lib/admin.functions";
+import { fileToBase64 } from "@/lib/upload";
 import { sortedImages } from "@/lib/catalog";
 import { btnGhost, btnGold, btnSubtle } from "@/components/site/buttons";
 
