@@ -187,6 +187,41 @@ export const deleteProductImage = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+const IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/avif"]);
+
+/** Recebe uma foto do painel, guarda no armazenamento da loja e devolve o endereço público. */
+export const uploadAdminImage = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: Record<string, unknown>) => {
+    const contentType = String(raw["content_type"] ?? "");
+    if (!IMAGE_TYPES.has(contentType)) {
+      throw new Error("Envie uma imagem JPG, PNG, WEBP ou AVIF.");
+    }
+    const payload = String(raw["data"] ?? "");
+    if (!payload) throw new Error("Selecione uma imagem.");
+    if (payload.length > 14_000_000) throw new Error("Imagem muito grande. Use até 10 MB.");
+    const rawName = String(raw["filename"] ?? "foto.jpg")
+      .replace(/[^a-zA-Z0-9._-]/g, "-")
+      .slice(-80);
+    return {
+      filename: rawName || "foto.jpg",
+      content_type: contentType,
+      data: payload,
+      folder: raw["folder"] === "loja" ? "loja" : "produtos",
+    };
+  })
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const bytes = Buffer.from(data.data, "base64");
+    const path = `${data.folder}/${Date.now()}-${data.filename}`;
+    const { error } = await supabaseAdmin.storage
+      .from("produtos")
+      .upload(path, bytes, { contentType: data.content_type, upsert: false });
+    if (error) throw new Error(error.message);
+    return { url: `/api/public/foto/${path}` };
+  });
+
 export const getAdminSettings = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
