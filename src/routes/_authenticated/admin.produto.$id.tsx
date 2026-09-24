@@ -41,6 +41,7 @@ function EditProduct() {
   const save = useServerFn(updateAdminProduct);
   const addImage = useServerFn(addProductImage);
   const removeImage = useServerFn(deleteProductImage);
+  const sendImage = useServerFn(uploadAdminImage);
 
   const [form, setForm] = useState({
     name: product.name,
