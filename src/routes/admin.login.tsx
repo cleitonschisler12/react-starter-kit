@@ -45,15 +45,22 @@ function AdminLogin() {
     }
     try {
       await authorizeAdmin();
-    } catch {
-      await supabase.auth.signOut();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "";
+      if (message.includes("autorização administrativa")) {
+        await supabase.auth.signOut();
+        setLoading(false);
+        setError("Esta conta não possui autorização administrativa.");
+        return;
+      }
       setLoading(false);
-      setError("Esta conta não possui autorização administrativa.");
+      setError("Não foi possível validar o acesso agora. Tente novamente em instantes.");
       return;
     }
     setLoading(false);
     navigate({ to: "/admin", replace: true });
   }
+
 
   async function createAuthorizedAccount() {
     setError(null);
