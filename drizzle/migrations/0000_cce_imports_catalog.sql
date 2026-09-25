@@ -151,9 +151,9 @@ VALUES ('default', 'CCE Imports', '5546999864663', '@cceimports.oficial', 'https
   'Entrega grátis nas áreas urbanas de Espigão Alto do Iguaçu e Quedas do Iguaçu. Outras cidades: envio pelos Correios com frete e prazo consultados pelo CEP.',
   'CCE IMPORTS • PERFUMES E CELULARES', 'Seu próximo perfume. Seu novo celular.',
   'Explore nossa seleção, compare as opções e escolha com atendimento próximo pelo WhatsApp.',
-  '/__l5e/assets-v1/a1f8f11c-8273-4950-a970-e8e4e92658e1/logo.jpg',
-  '/__l5e/assets-v1/2747431d-9d38-4554-ad5c-8ff95cf6efa7/a.jpg',
-  '/__l5e/assets-v1/14576ff7-43da-45f6-ab49-be6a312a96d5/b.jpg');
+  '/images/logo.jpg',
+  '/images/a.jpg',
+  '/images/b.jpg');
 
 -- ADMIN PENDING NOTES (private)
 CREATE TABLE public.admin_notes (
@@ -214,11 +214,11 @@ INSERT INTO public.products (seed_key, slug, name, brand, category, base_price_c
 INSERT INTO public.product_images (product_id, url, alt_text, sort_order, is_primary)
 SELECT p.id, v.url, v.alt, 0, true FROM public.products p
 JOIN (VALUES
-  ('P01','/__l5e/assets-v1/71307b43-fd81-4dd5-bf9f-1c9be3d5ab78/c.jpg','Frasco preto e dourado do perfume Asad da Lattafa'),
-  ('P02','/__l5e/assets-v1/0a3fe4a8-8142-4447-9655-8ef541504f56/d.jpg','Frasco preto com detalhes rosé do perfume Asad Elixir da Lattafa'),
-  ('P03','/__l5e/assets-v1/4101be7b-1e99-4cc3-bdfa-44a76b58bdb6/e.jpg','Frasco preto do perfume Club de Nuit Intense Man da Armaf'),
-  ('P04','/__l5e/assets-v1/f42bba72-7078-45bc-a7eb-2d36d4680017/f.jpg','Frasco preto e dourado do perfume Bade''e Al Oud Oud for Glory da Lattafa'),
-  ('P05','/__l5e/assets-v1/78462b05-548c-4387-835d-3f11a7f48cdb/g.jpg','Frasco marrom com tampa de cervo dourada do perfume Al Noble Wazeer da Lattafa'),
-  ('P06','/__l5e/assets-v1/a16703e4-06bc-455c-8880-8e5d4fd089f7/h.jpg','Frasco rosa com detalhes prateados do perfume Yara da Lattafa'),
-  ('P07','/__l5e/assets-v1/c646398c-3a25-4fe4-8e86-525f5472606c/i.jpg','Frasco de cristal âmbar do perfume Khamrah da Lattafa')
+  ('P01','/images/c.jpg','Frasco preto e dourado do perfume Asad da Lattafa'),
+  ('P02','/images/d.jpg','Frasco preto com detalhes rosé do perfume Asad Elixir da Lattafa'),
+  ('P03','/images/e.jpg','Frasco preto do perfume Club de Nuit Intense Man da Armaf'),
+  ('P04','/images/f.jpg','Frasco preto e dourado do perfume Bade''e Al Oud Oud for Glory da Lattafa'),
+  ('P05','/images/g.jpg','Frasco marrom com tampa de cervo dourada do perfume Al Noble Wazeer da Lattafa'),
+  ('P06','/images/h.jpg','Frasco rosa com detalhes prateados do perfume Yara da Lattafa'),
+  ('P07','/images/i.jpg','Frasco de cristal âmbar do perfume Khamrah da Lattafa')
 ) AS v(seed_key, url, alt) ON v.seed_key = p.seed_key;

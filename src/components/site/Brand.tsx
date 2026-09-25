@@ -1,4 +1,4 @@
-import logoAsset from "@/assets/logo-cce.jpeg.asset.json";
+const logoAsset = { url: "/images/logo-cce.jpeg" };
 
 export function Brand({
   logoUrl,
