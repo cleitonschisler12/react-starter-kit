@@ -4,43 +4,61 @@ import { PRODUCT_COLUMNS, type Product } from "./catalog";
 
 const AUTHORIZED_ADMIN_EMAIL = "contato.cceimports.com.br@gmail.com";
 
-/** Garante que o usuário autenticado possui o papel de administrador. */
-async function assertAdmin(context: { supabase: any; userId: string }) {
+/** Lê o e-mail do token já validado pelo middleware (sem depender de sessão no servidor). */
+function claimsEmail(context: { claims?: Record<string, unknown> }) {
+  const raw = context.claims?.["email"];
+  return typeof raw === "string" ? raw.trim().toLowerCase() : "";
+}
+
+async function hasAdminRole(context: { supabase: any; userId: string }) {
   const { data, error } = await context.supabase.rpc("has_role", {
     _user_id: context.userId,
     _role: "admin",
   });
   if (error) throw new Error(error.message);
-  if (!data) throw new Error("Acesso restrito a administradores.");
+  return Boolean(data);
+}
+
+/** Garante que o usuário autenticado possui o papel de administrador. */
+async function assertAdmin(context: { supabase: any; userId: string; claims?: any }) {
+  if (await hasAdminRole(context)) return;
+  // Conta do proprietário sem o papel gravado ainda: concede na hora.
+  if (claimsEmail(context) === AUTHORIZED_ADMIN_EMAIL) {
+    await grantAdminRole(context.userId);
+    if (await hasAdminRole(context)) return;
+  }
+  throw new Error("Acesso restrito a administradores.");
+}
+
+async function grantAdminRole(userId: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await supabaseAdmin
+    .from("user_roles")
+    .upsert({ user_id: userId, role: "admin" }, { onConflict: "user_id,role" });
+  if (error) throw new Error(error.message);
 }
 
 /** Concede o papel somente à conta autenticada com o e-mail autorizado pelo proprietário. */
 export const ensureAuthorizedAdmin = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data, error } = await context.supabase.auth.getUser();
-    const email = data.user?.email?.trim().toLowerCase();
-    if (error || !email || email !== AUTHORIZED_ADMIN_EMAIL) {
+    // Já é administrador no banco: nada a fazer.
+    if (await hasAdminRole(context)) return { ok: true, isAdmin: true };
+
+    if (claimsEmail(context) !== AUTHORIZED_ADMIN_EMAIL) {
       throw new Error("Esta conta não possui autorização administrativa.");
     }
 
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error: roleError } = await supabaseAdmin
-      .from("user_roles")
-      .upsert({ user_id: context.userId, role: "admin" }, { onConflict: "user_id,role" });
-    if (roleError) throw new Error(roleError.message);
-    return { ok: true };
+    await grantAdminRole(context.userId);
+    return { ok: true, isAdmin: true };
   });
 
 export const getAdminSession = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    return { userId: context.userId, isAdmin: Boolean(data) };
+    return { userId: context.userId, isAdmin: await hasAdminRole(context) };
   });
+
 
 export const listAdminProducts = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
